@@ -1,0 +1,90 @@
+# PIPELINE DEFINITION
+# Name: data-scientist-string-processing-pipeline
+# Description: Kubeflow pipeline wrapping DS string processing logic
+# Inputs:
+#    a: str [Default: 'Hello']
+#    b: str [Default: 'World']
+components:
+  comp-processing-component:
+    executorLabel: exec-processing-component
+    inputDefinitions:
+      parameters:
+        a:
+          parameterType: STRING
+        b:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        combined:
+          parameterType: STRING
+        reversed:
+          parameterType: STRING
+        uppercased:
+          parameterType: STRING
+deploymentSpec:
+  executors:
+    exec-processing-component:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - processing_component
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'kfp==2.15.2'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef processing_component(\n    a: str,\n    b: str\n) -> ProcessingResults:\n\
+          \    def concat(a: str, b: str) -> str:\n        return a + b\n\n    def\
+          \ reverse(text: str) -> str:\n        return text[::-1]\n\n    def to_upper(text:\
+          \ str) -> str:\n        return text.upper()\n\n    combined_val = concat(a,\
+          \ b)\n    reversed_val = reverse(combined_val)\n    uppercased_val = to_upper(combined_val)\n\
+          \n    return ProcessingResults(\n        combined=combined_val,\n      \
+          \  reversed=reversed_val,\n        uppercased=uppercased_val\n    )\n\n"
+        image: python:3.10
+pipelineInfo:
+  description: Kubeflow pipeline wrapping DS string processing logic
+  name: data-scientist-string-processing-pipeline
+root:
+  dag:
+    tasks:
+      processing-component:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-processing-component
+        inputs:
+          parameters:
+            a:
+              componentInputParameter: a
+            b:
+              componentInputParameter: b
+        taskInfo:
+          name: processing-component
+  inputDefinitions:
+    parameters:
+      a:
+        defaultValue: Hello
+        isOptional: true
+        parameterType: STRING
+      b:
+        defaultValue: World
+        isOptional: true
+        parameterType: STRING
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.15.2

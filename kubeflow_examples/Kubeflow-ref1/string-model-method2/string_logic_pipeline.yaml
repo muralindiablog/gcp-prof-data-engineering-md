@@ -1,0 +1,97 @@
+# PIPELINE DEFINITION
+# Name: string-transformation-pipeline
+# Description: 2026 Standard: Pure DS Logic Handover
+# Inputs:
+#    input_a: str [Default: 'Hello']
+#    input_b: str [Default: 'World']
+components:
+  comp-string-processing-component:
+    executorLabel: exec-string-processing-component
+    inputDefinitions:
+      parameters:
+        a:
+          parameterType: STRING
+        b:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        combined:
+          parameterType: STRING
+        reversed:
+          parameterType: STRING
+        uppercased:
+          parameterType: STRING
+deploymentSpec:
+  executors:
+    exec-string-processing-component:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - string_processing_component
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'kfp==2.15.2'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef string_processing_component(a: str, b: str) -> NamedTuple(\n\
+          \    'ProcessingResults', \n    combined=str, \n    reversed=str, \n   \
+          \ uppercased=str\n):\n    \"\"\"\n    KFP wrapper for the pure Data Science\
+          \ logic.\n    Note: Internal functions are defined inside to ensure container\
+          \ portability.\n    \"\"\"\n\n    # --- DATA SCIENTIST'S OWNED LOGIC START\
+          \ ---\n    def concat(a: str, b: str) -> str:\n        return a + b\n\n\
+          \    def reverse(text: str) -> str:\n        return text[::-1]\n\n    def\
+          \ to_upper(text: str) -> str:\n        return text.upper()\n\n    # Transformation\
+          \ execution\n    combined_val = concat(a, b)\n    reversed_val = reverse(combined_val)\n\
+          \    uppercased_val = to_upper(combined_val)\n\n    # Return matches the\
+          \ NamedTuple signature\n    from collections import namedtuple\n    results\
+          \ = namedtuple('ProcessingResults', ['combined', 'reversed', 'uppercased'])\n\
+          \    return results(combined_val, reversed_val, uppercased_val)\n    # ---\
+          \ DATA SCIENTIST'S OWNED LOGIC END ---\n\n"
+        image: python:3.11
+pipelineInfo:
+  description: '2026 Standard: Pure DS Logic Handover'
+  name: string-transformation-pipeline
+root:
+  dag:
+    tasks:
+      string-processing-component:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-string-processing-component
+        inputs:
+          parameters:
+            a:
+              componentInputParameter: input_a
+            b:
+              componentInputParameter: input_b
+        taskInfo:
+          name: string-processing-component
+  inputDefinitions:
+    parameters:
+      input_a:
+        defaultValue: Hello
+        isOptional: true
+        parameterType: STRING
+      input_b:
+        defaultValue: World
+        isOptional: true
+        parameterType: STRING
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.15.2

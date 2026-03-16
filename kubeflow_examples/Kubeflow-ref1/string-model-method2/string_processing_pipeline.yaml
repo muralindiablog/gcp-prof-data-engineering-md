@@ -1,0 +1,86 @@
+# PIPELINE DEFINITION
+# Name: string-processing-pipeline
+# Description: Single-file Kubeflow pipeline using dsl.component
+# Inputs:
+#    a: str [Default: 'Hello']
+#    b: str [Default: 'World']
+components:
+  comp-processing-component:
+    executorLabel: exec-processing-component
+    inputDefinitions:
+      parameters:
+        a:
+          parameterType: STRING
+        b:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        combined:
+          parameterType: STRING
+        reversed:
+          parameterType: STRING
+        uppercased:
+          parameterType: STRING
+deploymentSpec:
+  executors:
+    exec-processing-component:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - processing_component
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'kfp==2.15.2'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef processing_component(\n    a: str,\n    b: str\n) -> ProcessingResults:\n\
+          \    \"\"\"\n    Kubeflow wrapper around DS logic.\n    NO business logic\
+          \ is implemented here.\n    \"\"\"\n    return run(a, b)\n\n"
+        image: python:3.10
+pipelineInfo:
+  description: Single-file Kubeflow pipeline using dsl.component
+  name: string-processing-pipeline
+root:
+  dag:
+    tasks:
+      processing-component:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-processing-component
+        inputs:
+          parameters:
+            a:
+              componentInputParameter: a
+            b:
+              componentInputParameter: b
+        taskInfo:
+          name: processing-component
+  inputDefinitions:
+    parameters:
+      a:
+        defaultValue: Hello
+        isOptional: true
+        parameterType: STRING
+      b:
+        defaultValue: World
+        isOptional: true
+        parameterType: STRING
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.15.2
