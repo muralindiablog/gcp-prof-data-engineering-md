@@ -1,0 +1,40 @@
+The modern approach: Data lakehouse
+Due to their complementary nature, an ideal approach combines the flexibility and low cost of a data lake with the speed and accuracy of a data warehouse. This hybrid approach has created the concept of a data lakehouse.
+
+
+A data lakehouse architecture combines the low-cost storage of a data lake with the management features and query performance of a data warehouse. The goal is to create a single, unified platform that can support traditional BI, modern data science, and AI workloads without moving or duplicating data.
+
+A lakehouse achieves this by implementing a metadata and governance layer on top of open-format files stored in low-cost object storage, like Google Cloud Storage. This gives you the best of both worlds.
+
+For Cymbal, a lakehouse solves a key challenge: breaking down data silos. Previously, its sales data was in a warehouse and its customer review data was in a data lake.
+
+The two could not be analyzed together easily. With a lakehouse, Cymbal can now run a single query to correlate customer sentiment from text reviews with sales trends from its transaction database.
+
+
+What are the key feautures of a Google Cloud data lakehouse?
+
+1 Support for most data formats
+
+2 Flexible schema-on-read or schema-on-write
+
+3 Access for all types of data users
+
+4 Cost flexibility based on needs
+
+5 Unified data governance
+
+6 ACID transaction support
+
+Google Cloud implements data lakehouses through BigLake technology. BigLake allows you to apply Google Cloud’s governance and query capabilities to data stored in Google Cloud or even in other major clouds. You can manage and query your data where it lives, using open formats like Parquet, ORC, and Avro, while benefiting from BigQuery's powerful and flexible query engine.
+
+
+Data lakehouses solve many challenges by unifying data storage and access.
+The benefits include:
+
+Reduced data redundancy
+
+Unified governance
+
+Broken-down data silos
+
+Improved flexibility and scalability

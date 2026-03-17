@@ -1,0 +1,25 @@
+Building a data lake foundation
+
+For an online retail business like the Cymbal company, data is a critical asset. From customer purchase history and website clicks to supply chain logistics and marketing campaign performance, Cymbal generates massive amounts of diverse data. A robust data architecture is essential to make informed business decisions, personalize customer experiences, and optimize operations.
+
+Data storage for data lakehouses on Google Cloud
+
+A data lakehouse combines the key features of data lakes and data warehouses. It offers the flexibility and scalability of a data lake for storing raw, unstructured, or structured data, with the schema enforcement and query performance of a data warehouse. This hybrid approach allows organizations like Cymbal to handle all their data needs in one unified system.
+
+Google Cloud provides a powerful set of tools to build this unified architecture. The primary storage for your data lakehouse is Cloud Storage. Cloud Storage is a massively scalable, highly durable, and cost-effective object storage service. Cymbal can use it to store almost any type of data file, regardless of its size or format. However, you are not limited to using Cloud Storage. If your strategy is multi-cloud, you can keep your data in another major provider's cloud storage.
+
+Storing various data types (including multimodal)
+
+One of the biggest advantages of Cloud Storage is its ability to store multimodal data. This means you can store data in various formats and structures in one place. For Cymbal, this is incredibly valuable.
+
+Select each tab to learn more about the different data types they might have:
+
+
+Structured data files
+
+Semi-structured data
+
+Unstructured data
+Structured data is information that is highly organized into a predefined format, much like a spreadsheet with clear rows and columns. At Cymbal, this includes essential data like customer lists, product catalogs, and sales transactions. Because it has a predictable model, this data is easy for computers to search, analyze, and process.
+
+Cloud Storage can handle all of these data types. It provides the flexibility to store raw, unprocessed data as it arrives, without needing to define its structure beforehand. This is crucial for Cymbal as they continuously collect new types of data and want to analyze it later without immediate transformations.

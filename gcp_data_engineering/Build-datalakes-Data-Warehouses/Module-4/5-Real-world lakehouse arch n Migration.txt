@@ -1,0 +1,112 @@
+Real-world lakehouse architectures and migration
+You’ve covered the core components of a modern data lakehouse on Google Cloud, from governance and security to advanced analytics and machine learning. Now, you will bring it all together by examining recommended architectural patterns and discussing how a company like Cymbal might migrate from a traditional data architecture to a lakehouse.
+
+
+While every organization’s needs are unique, there are proven patterns for building a lakehouse on Google Cloud.
+
+
+The medallion architecture
+
+This architecture organizes data into three distinct zones: Bronze, Silver, and Gold.
+Select each tab to learn more.
+
+Bronze zone (raw data)
+This is the landing zone for all raw data. For Cymbal, this would include:
+
+Clickstream data from their website, streamed in real-time through Pub/Sub and landing in a Cloud Storage bucket.
+
+Batch exports of transactional data from their e-commerce database, saved as CSV or Avro files in Cloud Storage.
+
+JSON data from their social media marketing campaigns.
+
+The data in the bronze zone is normally immutable; it's a historical record of what was received.
+
+Silver Zone (Cleansed and Conformed Data)
+In this zone, the data is cleaned, validated, and enriched. This is where initial transformations happen. For Cymbal, this would involve:
+
+Parsing the raw clickstream data to create structured sessions.
+
+Joining the transactional data with customer dimension tables.
+
+Standardizing date and time formats.
+
+Data in the Silver zone is often stored in an open format like Parquet or as BigLake tables, making it queryable through BigQuery but still residing in Cloud Storage.
+
+
+Gold Zone (Curated Business-Level Data)
+This is the final, highly refined layer. The data here is aggregated and optimized for analytics and reporting. This data almost always resides in native BigQuery tables for maximum query performance. For Cymbal, this would be their single source of truth for key business metrics.
+
+Examples include:
+
+Aggregated daily sales tables.
+
+Customer 360-degree view tables.
+
+Inventory performance summaries.
+
+
+Migration strategies
+
+For a company like Cymbal, which might be running on a traditional on-premises data warehouse like Teradata or Hadoop, migrating to a cloud-native lakehouse is a significant project. A complete, one-time migration is often too risky and disruptive. Instead, a phased, use-case-driven approach is usually more successful.
+
+Migration strategy
+Let's review potential migration strategy for Cymbal.
+
+Establish the foundation
+The first step is to set up the core infrastructure on Google Cloud.
+
+This includes:
+
+Setting up a Google Cloud project with the appropriate IAM permissions and networking.
+
+Creating Cloud Storage buckets for the Bronze, Silver, and Gold zones.
+
+Setting up Dataplex to manage metadata and governance across the new lakehouse.
+
+Start with a high-impact use case
+Instead of migrating everything at once, Cymbal could pick one specific business problem to solve. A great candidate would be marketing analytics.
+
+This is an area where having access to both structured and unstructured data can provide significant value.
+
+Migrate the data
+For the marketing analytics use case, they would need to migrate relevant data.
+
+This could involve:
+
+Using BigQuery Data Transfer Service to set up recurring transfers of their existing sales and customer data from their on-premises warehouse to BigQuery.
+
+Setting up a data pipeline with a tool like Dataflow to ingest new, real-time clickstream data into their Cloud Storage Bronze zone.
+
+Build the new pipelines and reports
+With the data flowing into Google Cloud, they can start building the new data pipelines to populate their Silver and Gold zones.
+
+The marketing team can then build new dashboards and reports in a tool like Looker, pointing them to the new Gold tables in BigQuery.
+
+Decommission and iterate
+Once the new marketing analytics solution is running successfully and business users approve the solution, they can decommission the old on-premises marketing reports. This demonstrates value and builds momentum for the next phase of the migration.
+
+They can then repeat this process for other use cases, such as supply chain optimization or financial reporting, gradually migrating more workloads to the cloud.
+
+Cost management and optimization
+
+A key benefit of the cloud is the pay-as-you-go model, but it also requires a proactive approach to cost management. Here are some best practices that Cymbal would implement:
+
+1
+Choose the right storage class: Not all data needs to be accessed with the same frequency. For the raw data in their Bronze zone, which might be accessed infrequently, they can use a cheaper storage class like Nearline or Coldline in Cloud Storage.
+
+2
+Optimize BigQuery queries: They can train their analysts to write efficient SQL queries. BigQuery provides tools to estimate the cost of a query before it's run. They can also use features like partitioning and clustering on their tables to reduce the amount of data scanned by each query.
+
+3
+Use BigQuery's flat-rate pricing: For predictable workloads, Cymbal can switch from on-demand pricing to a flat-rate model, where they purchase dedicated query processing capacity at a fixed monthly cost.
+
+4
+Set up budgets and alerts: In Google Cloud's billing console, they can set up budgets for their projects and create alerts that notify them when costs are approaching their limits.
+
+
+By embracing a modern lakehouse architecture on Google Cloud and following a strategic migration plan, Cymbal can create new opportunities for innovation, gain a competitive edge through data-driven insights, and build a scalable and cost-effective platform for the future.
+
+
+
+The following lesson has labs to provide hands-on experience and covers a number of best practices. Enjoy putting what you learned into practice.
+

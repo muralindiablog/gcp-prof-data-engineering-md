@@ -1,0 +1,36 @@
+Combining operational data in AlloyDB
+While Cloud Storage and open table formats like Iceberg are ideal for large-scale analytical data, operational data that powers Cymbal's daily operations require a different solution. This is where AlloyDB for PostgreSQL is an excellent choice.
+
+
+Operational data is the real-time, constantly changing information that drives Cymbal's immediate business processes.
+
+What does this include?
+Click on each card below to find out more.
+
+
+Click to flip
+Customer order processing
+
+
+
+Click to flip
+Inventory management
+
+
+
+Click to flip
+User login information
+
+
+These use cases require a database that can handle very high transaction volumes, provide extremely low latency for reads and writes, and ensure strong data consistency. Analytical databases are not designed for these real-time operational demands.
+
+
+AlloyDB is a fully managed, PostgreSQL-compatible database service built for demanding enterprise workloads. It combines the familiarity and flexibility of PostgreSQL with the performance, availability, and scalability of the cloud for critical operational applications.
+
+For Cymbal, AlloyDB provides:
+
+1 High performance: AlloyDB is significantly faster than standard PostgreSQL, making it ideal for high-transaction workloads like processing millions of online orders.
+
+2 High availability: It is built for resilience, ensuring Cymbal's core operations are always online, even during outages.
+
+3 PostgreSQL compatibility: This means Cymbal can leverage their existing PostgreSQL skills and tools, which makes migration easier and reduces the learning curve.

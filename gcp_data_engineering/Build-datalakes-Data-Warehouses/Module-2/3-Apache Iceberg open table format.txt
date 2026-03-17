@@ -1,0 +1,21 @@
+Introduction to Apache Iceberg open table format
+While Cloud Storage is excellent for storing raw files, a data lakehouse needs a way to bring structure and performance to this data. This is where open table formats come into play, and Apache Iceberg is a leading example.
+
+
+Imagine Cymbal has millions of customer orders stored as files in Cloud Storage. If they want to query these orders efficiently, for example, to find all orders placed in the last week by customers in a specific region, traditional file-based queries would be slow. They would have to scan every file to find the relevant information.
+
+Apache Iceberg solves this by adding a layer of metadata and structure on top of the files in Cloud Storage. It does not move your data; it organizes and manages it, acting as an index and catalog for your data files.
+
+
+What does Apache Iceberg provide?
+Click on each tab below to find out more.
+
+
+Schema evolution
+
+Hidden partitioning
+
+Time travel
+
+Atomic transactions
+By using Apache Iceberg with Cloud Storage, Cymbal can treat their collection of data files as performant, queryable tables, bringing the benefits of a data warehouse to their flexible data lake.

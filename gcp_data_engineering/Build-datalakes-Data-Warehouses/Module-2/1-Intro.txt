@@ -1,0 +1,12 @@
+Module 2: Building a data lakehouse with Cloud Storage, open formats, and BigQuery
+A lakehouse combines the strengths of data warehouses and data lakes into one powerful, unified platform. In this module, you will explore the concept of a data lakehouse and how Google Cloud helps you build this modern data architecture using open formats.
+
+You will start by building a foundation of understanding the different data storage options and how they fit into a data lakehouse strategy.
+
+
+In this module, you will learn to:
+
+1 Identify the key components of a modern Google Cloud lakehouse.
+
+2 Describe how these components work together to store, govern, and analyze data.
+

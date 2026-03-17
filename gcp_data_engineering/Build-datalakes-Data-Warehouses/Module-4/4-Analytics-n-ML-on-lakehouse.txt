@@ -1,0 +1,96 @@
+
+A secure and well-governed data lakehouse gives Cymbal the foundation to generate powerful insights and predictions with machine learning.
+
+Traditionally, building ML models required moving data from a data warehouse into a separate environment. This process was often slow, expensive, and created data silos.
+
+In this lesson, you’ll explore how the Google Cloud lakehouse architecture enables Cymbal to perform advanced analytics and machine learning directly on its data. This approach is faster, more efficient, and more accessible.
+
+
+BigQuery ML: Machine learning for data analysts
+
+One of the most powerful tools in the Google Cloud analytics toolkit is BigQuery ML.
+It allows data analysts and data scientists at Cymbal to build and deploy machine learning models using simple SQL queries. This makes machine learning accessible to more people, so you don't need to be an expert in Python or TensorFlow to create valuable predictive models.
+
+Consider a use case for Cymbal:
+predicting customer churn.
+
+To identify customers who are at risk of not making another purchase, the marketing analytics team can use BigQuery ML and a few SQL statements.
+
+
+Numbered divider1
+Feature engineering
+
+The first step is to prepare the data. The analysts write a SQL query to create features, or signals, that might predict churn.
+
+These could include the following fields:
+
+recency: days since last purchase
+
+frequency: purchases in the last year
+
+monetary_value: total spent
+
+days_since_first_purchase: customer tenure
+
+
+Numbered divider2
+Model training
+
+After the features are ready, they train a model with a single CREATE MODEL statement in SQL. For this binary classification problem (churn or no churn), a logistic regression or a boosted tree model is a good choice.
+
+Review the sample code below.
+
+
+SQL
+CREATE OR REPLACE MODEL cymbal_ecommerce.customer_churn_predictor
+OPTIONS(model_type='LOGISTIC_REG') AS
+SELECT
+customer_id,
+recency,
+frequency,
+monetary_value,
+(total_purchases > 1) AS will_return -- This is our label
+FROM
+cymbal_ecommerce.customer_purchase_summary;
+BigQuery handles all the complexities of model training behind the scenes.
+
+
+Numbered divider3
+Model evaluation
+
+After the model is trained, the analysts evaluate its performance using the ML.EVALUATE function. This provides metrics like accuracy, precision, and recall helping them understand how well the model is performing.
+
+
+Numbered divider4
+Prediction
+
+The final step is to use the model to make predictions on new data. With the ML.PREDICT function, they can get a list of all customers and their probability of churning. This list can then be used to create targeted marketing campaigns to re-engage at-risk customers.
+
+
+For Cymbal, BigQuery ML is a powerful tool. It allows the teams who are closest to the data to build predictive models, which leads to faster and more relevant insights.
+
+
+Continued
+Integrating with Vertex AI for advanced ML
+
+While BigQuery ML is ideal for many use cases, you sometimes need the power and flexibility of a comprehensive machine learning platform. For these situations, you can use Vertex AI. Vertex AI is the Google Cloud end-to-end platform for building, deploying, and managing ML models.
+
+A key advantage of the Google Cloud lakehouse is the seamless integration between BigQuery and Vertex AI. Data scientists at Cymbal can use this integration for more complex projects, like building a product recommendation engine.
+
+Workflow
+Next, let's review what a typical workflow includes.
+
+Data exploration and preparation in BigQuery
+Data scientists start by exploring the purchase history data in BigQuery. They might use the built-in notebook environment, which is powered by Vertex AI Notebooks, to write Python code and SQL queries to analyze and prepare the data for training.
+
+Training a custom model in Vertex AI
+For a recommendation engine, they might build a custom model using a library like TensorFlow or PyTorch. They can use Vertex AI Training to run their training code on a managed, scalable infrastructure. Vertex AI can automatically provision the necessary compute resources, and the training job can read data directly from BigQuery, which eliminates the need for manual data extraction.
+
+Model registration and deployment
+After the model is trained, it's registered in the Vertex AI Model Registry. The registry provides a central place to manage and version all of their models. From the registry, they can deploy the model to an endpoint with a single click. This endpoint provides a REST API that the Cymbal website can call to get real-time product recommendations for each user.
+
+MLOps and model monitoring
+Vertex AI also provides a suite of MLOps tools to automate and monitor the entire machine learning lifecycle. They can set up pipelines to automatically retrain and redeploy their recommendation model as new purchase data becomes available. They can also monitor the model for issues like prediction drift to ensure that its performance doesn't degrade over time.
+
+Summary
+By combining the data warehousing power of BigQuery with the advanced ML capabilities of Vertex AI, Cymbal can build sophisticated, production-grade machine learning solutions that improve business outcomes. They can move from idea to production faster than ever before, all within a unified and secure data ecosystem.

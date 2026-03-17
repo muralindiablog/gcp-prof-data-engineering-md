@@ -1,0 +1,42 @@
+This course consists of the following five modules:
+
+1 Introduction to Modern Data Engineering on Google Cloud
+
+2 Building a Data Lakehouse with Cloud Storage, Open Formats, and BigQuery
+
+3 Modernizing Data Warehouses with BigQuery and BigLake
+
+4 Advanced Lakehouse Patterns and Data Governance
+
+5 Hands-on with Labs and Best Practices
+
+
+Key takeaways
+
+
+
+By the end of this course, you'll be able to:
+
+Describe data lakes, data warehouses, and data lakehouses and their purposes.
+
+Describe the technologies and products used on Google Cloud for lakehouses.
+
+Explain the role of BigQuery as a central component in a lakehouse.
+
+Describe advanced lakehouse patterns and best practices.
+
+
+-------------------------------------------------------
+
+How an organization stores and manages its data is just as important as the data itself.
+
+For experienced data professionals, understanding the landscape of data storage solutions is key to building efficient, scalable, and cost-effective systems.
+
+This module introduces the foundational concepts of data lakes and data warehouses, setting the stage for modern data lakehouse architecture on Google Cloud.
+
+
+In this module, you will learn to:
+
+1 Understand the purpose of a data lake versus a data warehouse.
+
+2 Explain the concept of a data lakehouse architecture and its benefits.

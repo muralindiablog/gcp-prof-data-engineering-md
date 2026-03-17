@@ -1,0 +1,12 @@
+Combining operational and analytical data with federated queries
+BigQuery's capabilities extend beyond the lakehouse through federated queries.
+
+This feature allows Cymbal to query data in external systems, like their operational AlloyDB database, in real time without moving or copying it into BigQuery. This creates a bridge between their live operational data and their historical analytical data.
+
+
+Here is how Cymbal would combine real-time inventory data from AlloyDB with historical sales data from their Iceberg tables:
+
+1 First, a data administrator creates a secure connection resource in BigQuery. This connection contains the credentials and configuration details to allow BigQuery to communicate with Cymbal's AlloyDB instance. This is a one-time setup.
+
+2 To access the AlloyDB data, an analyst uses the EXTERNAL_QUERY SQL function within a BigQuery query. This function takes two arguments: the connection ID and the query to be executed on the AlloyDB database.
+

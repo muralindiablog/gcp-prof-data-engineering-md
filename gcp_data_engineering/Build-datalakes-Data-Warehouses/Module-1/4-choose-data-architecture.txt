@@ -1,0 +1,12 @@
+Choosing the right architecture
+While a data lakehouse is the newest approach, a data lake or a data warehouse might be a better fit for your specific needs. Let’s consider when each approach might be the best choice for Cymbal.
+
+
+
+Consider a data warehouse, like BigQuery, when the primary need is high-speed, interactive BI on structured business data, such as for Cymbal's finance department.
+
+
+Consider a data lake, using Cloud Storage, for the initial, low-cost storage of massive volumes of raw data. This is ideal for Cymbal's AI/ML research and development where the data's final use is not yet defined.
+
+
+Adopt a data lakehouse architecture with BigQuery and BigLake when you need to do it all: support BI, AI, and data science on a single, governed copy of your data, providing a holistic view for the entire company.

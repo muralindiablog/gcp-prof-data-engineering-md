@@ -1,0 +1,83 @@
+Security and ML in the lakehouse
+Your score: 75% Passing score: 80%
+Unfortunately, you need at least a 80% to pass this assessment. Not to worry though, review your answers and try again after Mar 18, 2026, 2:56:40 PM.
+check
+1.
+
+To comply with data privacy regulations, Cymbal E-commerce uses Sensitive Data Protection to manage PII. What are the three core functions of this process?
+check
+Discovery, Classification, and Protection.
+Authentication, Authorization, and Accounting.
+Ingestion, Transformation, and Loading.
+Auditing, Alerting, and Reporting.
+Correct! The lesson material states, "The process includes the following functions: Discovery, Classification, and Protection". This is the explicit methodology used to find and secure sensitive information.
+check
+2.
+
+A marketing analyst at Cymbal E-commerce needs access to a customer table but should not be able to view the customers' contact information. Which security control is most effective for protecting this Personally Identifiable Information (PII)?
+check
+Column-level security.
+Dynamic data masking.
+IAM bucket-level permissions.
+Row-level security.
+Correct! The lesson defines column-level security as the control that "restricts access to specific columns in a table," making it the perfect tool for protecting PII like contact information while allowing access to other data.
+check
+3.
+
+What is the primary advantage of using BigQuery ML for a task like predicting customer churn at Cymbal E-commerce?
+It automatically cleans and prepares all raw data from the bronze zone without user input.
+check
+It allows data analysts to build and deploy machine learning models using simple SQL queries.
+It requires moving data to a separate, specialized machine learning environment for training.
+It is only capable of building deep learning models using TensorFlow.
+Correct! The lesson highlights that BigQuery ML's power is that it "allows data analysts and data scientists...to build and deploy machine learning models using simple SQL queries," making ML more accessible.
+check
+4.
+
+In the Medallion Architecture, which zone contains the final, highly refined, and aggregated data optimized for analytics and reporting?
+The Bronze Zone.
+check
+The Gold Zone.
+The Raw Zone.
+The Silver Zone.
+Correct! The lesson describes the Gold Zone as the "final, highly refined layer" where data is "aggregated and optimized for analytics and reporting" and serves as the "single source of truth for key business metrics.".
+check
+5.
+
+While BigQuery ML is excellent for many use cases, Cymbal's data scientists need to build a complex, custom product recommendation engine. Which Google Cloud service provides an end-to-end platform for this advanced task and integrates seamlessly with BigQuery?
+check
+Vertex AI.
+Sensitive Data Protection.
+Dataplex.
+Looker.
+Correct! The lesson specifies that for more complex situations requiring a comprehensive ML platform, "you can use Vertex AI. Vertex AI is the Google Cloud end-to-end platform for building, deploying, and managing ML models.".
+close
+6.
+
+When setting up a Sensitive Data Protection job to de-identify a table for the analytics team, an engineer wants to replace email addresses with a non-reversible token that still allows for counting unique customers. Which transformation should they apply?
+Masking, to show only the first part of the email address.
+Tokenization with a cryptographic hash, to maintain referential integrity.
+close
+Redaction, to replace emails with a placeholder like [SENSITIVE_DATA].
+Anonymization, to remove the email column entirely.
+Incorrect. Redaction replaces the sensitive data with a placeholder, but it does not create a unique token that can be used to count unique instances.
+close
+7.
+
+Which SQL statement in BigQuery ML is used to begin the process of training a new model?
+ML.EVALUATE
+CREATE MODEL
+SELECT MODEL
+close
+ML.PREDICT
+Incorrect. The ML.PREDICT function is used after a model is trained to use the model to make predictions on new data.
+check
+8.
+
+What is the primary function of Dataplex in Cymbal E-commerce's data lakehouse?
+To execute machine learning models directly on raw data.
+To automatically de-identify all incoming sensitive data streams.
+check
+To act as a universal catalog for all data assets across BigQuery, Cloud Storage, and BigLake.
+To enforce row-level security on Cloud Storage buckets.
+Correct! The lesson explicitly states that for the fictional company Cymbal E-commerce, "Dataplex acts as a universal catalog for all their data assets". This centralized catalog is critical for data discovery and management.

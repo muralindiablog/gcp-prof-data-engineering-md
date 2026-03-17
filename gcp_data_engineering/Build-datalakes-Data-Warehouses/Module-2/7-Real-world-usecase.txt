@@ -1,0 +1,45 @@
+
+Optimizing marketing and supply chain with a data lakehouseReal world use case
+
+Cymbal recently launched a major marketing campaign for its new "Evergreen" outdoor collection. 
+To measure the campaign's true return on investment, their data team leveraged their Google Cloud data lakehouse with the goal of moving beyond simple sales metrics to understand the complete customer journey.
+
+Example
+Let’s review how Cymbal optimized marketing and supply chain using a Google Cloud data lakehouse.
+
+Step 1
+Unified data analysis
+Combining data with BigQuery
+Using BigQuery, analysts ran a single federated query to bring together data from multiple sources:
+
+AlloyDB: sales transactions + customer profiles (structured data).
+
+Cloud Storage (Iceberg tables): petabytes of clickstream data (semi-structured) showing each customer’s journey from ad click → product page views → checkout or abandonment.
+
+Step 2
+Insight discovery
+Why customers weren’t converting
+The analysis uncovered a regional insight:
+
+Customers in the Pacific Northwest showed strong interest in a waterproof jacket.
+
+But conversion rates were low.
+
+By joining behavioral data with product review text in Iceberg tables, they discovered reviews all mentioned a missing set of colors featured in the ads.
+
+Step 3
+Data-driven action
+Adjusting inventory and marketing
+With this insight, Cymbal acted quickly:
+
+Updated inventory with the desired jacket colors.
+
+Alerted the supply chain to increase stock in that region.
+
+Launched a targeted follow-up ad campaign for interested customers.
+
+This not only recovered lost sales but also improved marketing ROI and customer experience.
+
+----
+Summary:
+In summary, for Cymbal, a data lakehouse built with Cloud Storage as its foundation, enhanced by open table formats like Apache Iceberg, powered by BigQuery, and integrated with AlloyDB for critical operational data, provides a powerful, flexible, and future-proof data architecture. This setup enables them to leverage all their data assets, from raw multimedia to real-time transactions, to drive their business forward with smart decisions based on high quality data.

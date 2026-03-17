@@ -1,0 +1,10 @@
+BigQuery as the central processing engine
+BigQuery serves as the central analytics and query engine for Cymbal's data lakehouse.
+
+While Cloud Storage and Iceberg provide a flexible, open-standard foundation for storing vast amounts of raw and structured data, BigQuery is the high-performance engine that activates it. By creating BigLake tables, Cymbal can use BigQuery's familiar SQL interface to directly and securely query the Iceberg-formatted data in their Cloud Storage data lake.
+
+
+This means they do not have to duplicate data or perform costly extract, transform, load (ETL) processes to run analytics. Analysts get the performance and features of a premier data warehouse while querying data directly in their open-format data lake.
+
+
+Furthermore, BigQuery also provides its own optimized, managed storage. Cymbal can use this native storage for their most frequently accessed, or "hot," datasets that require the fastest query performance, like key marketing performance dashboards. This gives them a unified platform to analyze data in their data lake, in BigQuery's native storage, or both, all through a single interface.

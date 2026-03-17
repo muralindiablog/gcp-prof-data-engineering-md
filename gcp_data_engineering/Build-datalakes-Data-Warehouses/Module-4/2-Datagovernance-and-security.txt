@@ -1,0 +1,90 @@
+Data governance and security in a unified platform
+For a global online retailer like Cymbal, managing data responsibly is not just a technical task, it is a core business function.
+
+They handle vast amounts of customer data, sales transactions, and inventory information. Ensuring this data is accurate, discoverable, and secure is crucial for personalized marketing and efficient supply chain management.
+
+
+This lesson discusses the Google Cloud tools and practices that enable robust data governance and security.
+
+Numbered divider1
+Dataplex – The metadata hub
+
+Select each accordion heading to expand and read more details.
+
+Why metadata matters
+--------------------
+Metadata is data about data. It identifies:
+
+who created the data,
+
+when it was created,
+
+what it contains,
+
+how it relates to other data,
+
+who owns it, and
+
+its security sensitivity.
+
+Dataplex for Cymbal
+-------------------
+Without a centralized metadata system, data management can be difficult. Dataplex provides a unified metadata hub. For Cymbal, Dataplex acts as a universal catalog for all their data assets, whether they reside in BigQuery, Cloud Storage, or BigLake.
+
+For Cymbal's data analysts, this centralized catalog is critical. Instead of searching through different systems to find the required datasets, they use the Dataplex catalog to discover data, understand data lineage, and manage and augment metadata.
+
+Business impact
+---------------
+By providing a single reference source, Dataplex helps Cymbal manage data at scale while ensuring consistency and quality.
+
+
+
+Sensitive Data Protection
+Cymbal has a responsibility to protect its customers' sensitive information, such as names, addresses, and credit card numbers. A data breach can damage their reputation and lead to significant financial penalties. Sensitive Data Protection is an essential tool for this purpose.
+
+Sensitive Data Protection allows Cymbal to automatically discover, classify, and protect sensitive data across their lakehouse. Let's learn more about each function.
+
+Discovery
+Cymbal runs scans on BigQuery tables and Cloud Storage buckets to identify sensitive data. For example, they can configure a scan to look for patterns that match credit card numbers or email addresses.
+
+Classification
+Once identified, data is classified by sensitivity level. This ensures the right security controls are applied.
+
+Protection
+For protection, Cymbal can use techniques like masking or tokenization to de-identify the data. For instance, a customer support representative might only see the last four digits of a credit card number, while the full number is replaced with a non-sensitive token.
+
+Identity and Access Management (IAM)
+
+Controlling data access is a cornerstone of effective governance. Identity and Access Management (IAM) in Google Cloud provides the foundation for access control.
+
+Cymbal follows the principle of least privilege, meaning users are given only the minimum access necessary to perform their jobs. For their lakehouse, this translates to specific IAM best practices for each Google Cloud service.
+
+Flip each card below to learn more.
+
+Cloud Storage
+Access controlled at the bucket level.
+
+Typically restricted to engineers and service accounts responsible for data ingestion.
+
+BigQuery
+Granular IAM control at dataset and table level.
+
+Analysts: read-only access to curated sales data.
+
+Data scientists: create/modify tables in sandbox datasets.
+
+BigLake
+Extends BigQuery’s fine-grained security to Cloud Storage data. This provides a significant advantage.
+
+Fine-grained security
+
+Cymbal applies row-level and column-level security for even greater control:
+
+Column-level security: Restricts access to specific columns in a table. For example, a marketing analyst might be able to access a customer's purchase history but not their contact information. This is effective for protecting Personally Identifiable Information (PII).
+
+Row-level security: Filters which rows a user can access. A regional sales manager for North America, for instance, would only have access to sales data for that region. This is particularly useful for large, multinational companies like Cymbal.
+
+For BigLake tables in Cloud Storage, dynamic data masking can also be applied.
+
+The next lesson provides a demonstration of how to use Sensitive Data Protection to find Personally Identifiable Information (PII) in a dataset.
+

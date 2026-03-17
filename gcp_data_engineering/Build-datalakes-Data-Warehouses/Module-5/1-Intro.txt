@@ -1,0 +1,10 @@
+Module 5: Labs and best practices
+Next, you’ll put what you’ve learned into practice through hands-on labs and a review of best practices. You’ll reinforce how Google Cloud services work together in a lakehouse, and explore how to apply these concepts to real-world scenarios.
+
+n this module, you will learn to:
+
+1 Apply your knowledge of Google Cloud lakehouse components in hands-on labs with BigQuery ML and vector search.
+
+2 Review best practices for designing, governing, and optimizing a modern data lakehouse.
+
+3 Recognize common pitfalls and prepare for future trends in AI and data modernization.

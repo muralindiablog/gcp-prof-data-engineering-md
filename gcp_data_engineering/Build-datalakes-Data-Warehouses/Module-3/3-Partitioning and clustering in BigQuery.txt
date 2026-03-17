@@ -1,0 +1,244 @@
+Partitioning and clustering in BigQuery
+Now that you understand the basics of BigQuery, you'll learn how to make it even more efficient. For a company like Cymbal, with massive datasets, running queries that scan every single piece of data can become slow and expensive, even for BigQuery. You can optimize this with two powerful techniques: partitioning and clustering.
+
+
+Partitioning
+
+Partitioning is like adding dividers to a filing cabinet. Instead of one giant drawer, you have separate sections for each year, month, or day. In BigQuery, you can partition a table based on a date or an integer column.   
+
+Let’s examine some dummy sales data from Cymbal at a small scale.
+
+Dummy sales transactions table (Cymbal)
+
+transaction_date
+
+customer_id
+
+product_category
+
+sales_amount
+
+2025-08-01
+
+CUST002
+
+Headsets
+
+52
+
+2025-08-01
+
+CUST002
+
+Keyboards
+
+186
+
+2025-08-01
+
+CUST003
+
+Headsets
+
+465
+
+2025-08-01
+
+CUST005
+
+Headsets
+
+57
+
+2025-08-02
+
+CUST003
+
+Shoes
+
+413
+
+…
+
+…
+
+…
+
+…
+
+Partitioned views by transaction_date
+
+Partition: 2025-08-01
+transaction_date
+
+customer_id
+
+product_category
+
+sales_amount
+
+2025-08-01
+
+CUST002
+
+Headsets
+
+52
+
+2025-08-01
+
+CUST002
+
+Keyboards
+
+186
+
+2025-08-01
+
+CUST003
+
+Headsets
+
+465
+
+2025-08-01
+
+CUST005
+
+Headsets
+
+57
+
+Partition: 2025-08-02
+transaction_date
+
+customer_id
+
+product_category
+
+sales_amount
+
+2025-08-02
+
+CUST003
+
+Shoes
+
+413
+
+2025-08-02
+
+CUST002
+
+Headsets
+
+118
+
+2025-08-02
+
+CUST004
+
+Consoles
+
+455
+
+When you run a query that filters by a specific date range, like for sales from last week, BigQuery knows it only needs to scan the partitions for those specific days. It completely ignores all the other partitions, which drastically reduces the amount of data scanned. This makes your queries faster and cheaper.
+
+
+-------------------
+Clustering
+
+While partitioning divides the data into large chunks, clustering sorts the data within each of those chunks. Think of it as organizing the files within each drawer of your filing cabinet alphabetically by customer name.
+
+
+For Cymbal, you might cluster a partitioned sales table by `customer_id` or `product_category`. If you run a query to find all purchases made by a specific customer within the last month, BigQuery first goes to the correct monthly partition.
+
+Clustering example (partition: 2025-08-01, clustered by customer_id)
+transaction_date
+
+customer_id
+
+product_category
+
+sales_amount
+
+2025-08-01
+
+CUST002
+
+Headsets
+
+52
+
+2025-08-01
+
+CUST002
+
+Keyboards
+
+186
+
+2025-08-01
+
+CUST002
+
+Headsets
+
+465
+
+2025-08-01
+
+CUST002
+
+Headsets
+
+57
+
+Rows within this partition are now sorted/grouped by customer_id.
+
+Query example with partition + clustering
+
+SELECT *
+FROM cymbal_sales
+WHERE transaction_date = '2025-08-01'
+  AND customer_id = 'CUST003';
+Now because the data is sorted by `customer_id`, it can jump directly to the data for that customer instead of reading through the entire partition.
+
+---------------
+BigQuery works differently depending on whether you’re using its native tables or external Apache Iceberg tables stored in Cloud Storage.
+
+
+To explore how this works, open each section of the accordion below. Each panel breaks down a piece of the process — from how partitions are tracked to how queries skip unnecessary data.
+
+
+Partitioning in Iceberg
+When querying Apache Iceberg tables in Cloud Storage, BigQuery doesn't implement its own partitioning and clustering. Instead, it intelligently leverages the existing structure defined in the Iceberg table's own metadata, demonstrating the power of open standards.
+
+With partitioning, the partitions are typically defined and written by a data processing engine like Apache Spark. For instance, a sales data table might be partitioned by transaction_date. The Iceberg metadata meticulously tracks which specific data files in Cloud Storage belong to which date.
+
+
+Query filtering example
+When you run a query in BigQuery with a filter like WHERE transaction_date = '2025-08-15', BigQuery (via BigLake) first reads this metadata.
+
+It instantly identifies the exact set of files corresponding to that date and prunes away all others. This tells the query workers to ignore irrelevant data, drastically reducing the amount of data scanned, which lowers costs and accelerates query performance.
+
+
+Clustering in Iceberg
+The concept of clustering in BigQuery is mirrored by data sorting and file-level statistics in Iceberg. The data within Iceberg's Parquet or ORC files is often sorted by specific columns, like customer_id.
+
+The Iceberg metadata then stores statistics, such as the minimum and maximum customer_id values, for each individual data file.
+
+
+Predicate pushdown
+If your BigQuery query filters for a specific customer, the query planner consults these statistics. It can then skip reading any files whose min/max range doesn't contain the requested customer_id, even if they are in the correct partition.
+
+This powerful predicate pushdown provides a finer-grained level of data pruning, ensuring maximum query efficiency on your open data lakehouse.
+
+
+Why it matters
+Partitioning and clustering together give BigQuery fine-grained control over how your data is queried, leading to significant performance improvements and cost savings, especially as your data grows.
+
+
+----
+Whether you’re working with BigQuery native tables or Apache Iceberg tables, the principle is the same: Use metadata to skip unnecessary data, so queries run faster and cost less.
+

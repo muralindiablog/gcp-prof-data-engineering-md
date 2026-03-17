@@ -1,0 +1,131 @@
+Log in to Google Cloud Console
+Using the browser tab or window you are using for this lab session, copy the Username from the Connection Details panel and click the Open Google Console button.
+Note: If you are asked to choose an account, click Use another account.
+Paste in the Username, and then the Password as prompted.
+Click Next.
+Accept the terms and conditions.
+Since this is a temporary account, which will last only as long as this lab:
+
+Do not add recovery options
+Do not sign up for free trials
+Once the console opens, view the list of services by clicking the Navigation menu (Navigation menu icon) at the top-left.
+Navigation menu
+
+Verify or enable required APIs
+In the Google Cloud Console, enter BigQuery Connection API in the top search bar.
+
+Click on the result BigQuery Connection API.
+
+If the API is not already enabled, click Enable to enable the API.
+
+Task 1. Create a connection to AlloyDB
+In this task, you create a new connection to AlloyDB for BigQuery to use.
+
+Create the connection
+In the Google Cloud Console, in the Navigation menu (Navigation menu), navigate to BigQuery > Studio.
+
+Under Explorer, click + Add data.
+
+In the fly out on the left under Data Source Type select Databases.
+
+On the right of the fly out under Featured data sources click the card for Google Cloud AlloyDB.
+
+In the resulting selection of cards click on BigQuery Federation.
+
+In the Externa data source entry screen use the following values:
+
+Property	Value
+Connection type	AlloyDB
+Connection ID	
+AlloyDB-weblog
+Copied!
+Location type	Region
+Region	
+Region
+Copied!
+Friendly name	leave blank
+Description	leave blank
+Encryption	Default
+Username	
+postgres
+Copied!
+Password	
+Password
+Copied!
+Database	
+postgres
+Copied!
+AlloyDB Instance	
+//alloydb.googleapis.com/projects/Project ID/locations/Region/clusters/cymbal-cluster/instances/cymbal-instance
+Copied!
+Click Create connection
+Click Check my progress to verify the objective.
+Create a connection to AlloyDB
+
+Task 2. Set IAM permissions for the connection service account
+To access data in AlloyDB the service account that was created automatically when you made the connection needs to be given permission to AlloyDB.
+
+Set IAM permissions
+In BigQuery Classic Explorer panel expand the entry that is the project id for the lab.
+
+Now expand the entry Connections.
+
+Click on the entry that you just created. The details for the connection will appear in the main panel on the right. Copy the entry listed for the Service account id. Here is an example of what it appears like: service-164632061610@gcp-sa-bigqueryconnection.iam.gserviceaccount.com
+
+From the navigation menu select IAM & Admin and from the flyout submenu select IAM.
+
+Click + Grant access.
+
+For New principals paste in the connection service account id you copied in step 3.
+
+Click the Select a role drop down. In the Filter area that appears enter AlloyDB. Scroll until you find AlloyDB Client and select it.
+
+Click Add another role.
+
+Click the new Select a role drop down. In the Filter area that appears enter BigQuery. Scroll until you find BigQuery Connection User and select it.
+
+Click the Save box at the bottom of the screen.
+
+Click Check my progress to verify the objective.
+Set IAM permissions for the connection service account
+
+Task 3. Running a federated query from BigQuery
+In this task you will run a query combining Cymbal's customer information in BigQuery with their weblog information in AlloyDB.
+
+In the Google Cloud Console Navigation menu (Navigation menu), navigate to BigQuery > Studio.
+
+In BigQuery Classic Explorer panel expand the entry that is the project id for the lab.
+
+Now expand the entry Connections.
+
+Click the 3 vertical dots to the right of the connection you created. Select Query
+
+Update the query by replacing the SELECT statement in the EXTERNAL_QUERY portion of the query with the following code. Don't replace the entire query, only the portion within the EXTERNAL_QUERY block between the " " marks:
+
+SELECT customer_id, CAST(log_id AS VARCHAR(200)) AS log_id, timestamp, url FROM web_log LIMIT 100
+Copied!
+Click Run. The returned data is from AlloyDB even through you are in BigQuery!
+
+We will now extend the query to combine data in BigQuery native tables with the data in AlloyDB.
+
+Replace the current query with the following code:
+
+WITH log AS (
+  SELECT customer_id, log_id, timestamp, url FROM EXTERNAL_QUERY("Project ID.Region.AlloyDB-weblog", "SELECT customer_id, CAST(log_id AS VARCHAR(200)) AS log_id, timestamp, url FROM web_log LIMIT 100"))
+SELECT  log.customer_id
+, log.timestamp
+, log.url
+, C.*
+FROM customers.customer_details AS C
+INNER JOIN log
+ON C.id = log.customer_id
+ORDER BY C.id
+LIMIT 100;
+Copied!
+Click Run. The returned data combines data in AlloyDB and data in BigQuery!
+
+Click Check my progress to verify the objective.
+Running a federated query from BigQuery
+
+Congratulations!
+You configured and used a BigQuery external connection to allow BigQuery to access and process data stored in AlloyDB.

@@ -1,0 +1,102 @@
+The classics: Data lakes and data warehouses
+For years, organizations have relied on two primary methods for large-scale data storage: data lakes and data warehouses.
+
+They serve different purposes and are optimized for different kinds of data and workloads. To understand them, let's consider the example of Cymbal, a major e-commerce company.
+
+
+
+Data lakes
+
+Think of a data lake as a vast reservoir of data. It stores enormous amounts of raw data in its native format. You can pour any kind of data into it; structured, semi-structured, and unstructured.
+
+For Cymbal, this means storing:
+
+1
+Structured data, like transaction tables from its sales database.
+
+2
+Semi-structured data, like JSON logs from its web servers.
+
+3
+Unstructured data, like customer-submitted product images, videos, and text reviews.
+
+
+Data lakes are created on the premise of "store everything now, figure out how to use it later." With this approach, you apply a structure to the data when you read it (schema-on-read), not when you store it.
+
+This makes data lakes ideal for data exploration, machine learning, and big data processing. Cymbal's data scientists, for example, need access to original, unaltered clickstream data to build a new recommendation engine.
+
+What are the advantages of data lakes?
+
+1
+Flexibility: Stores all data types.
+
+2
+Agility: Fast to ingest data.
+
+3
+Scalability: Can grow to exabyte scale.
+
+4
+Cost-effectiveness: Uses low-cost object storage.
+
+5
+Support for advanced analytics: Ideal for AI/ML model training.
+
+What are the disadvantages of data lakes?
+
+1
+Risk of becoming a "data swamp": Without proper governance, it can become a disorganized collection of unusable data.
+
+2
+Management complexity: Requires significant overhead to maintain.
+
+3
+Time-consuming analysis: Data often needs to be cleaned and wrangled before it is usable.
+
+4
+Security risks: Raw data formats can increase security and compliance risks.
+
+Continued
+
+Data warehouses
+
+A data warehouse, in contrast, is like a highly organized library. Data is cleaned, transformed, and structured before it's stored. This process, known as schema-on-write, ensures the data is optimized for analysis and business intelligence (BI).
+
+The premise for data warehouses is "structure and quality first." The intended use of the data must be determined before the warehouse is designed.
+
+For Cymbal, this means the business has already defined key metrics like customer lifetime value and daily sales figures. The data warehouse is then built to provide fast and accurate reports on these specific metrics.
+
+
+Data warehouses are perfect for generating business reports and dashboards where speed and accuracy are critical.
+
+
+What are the advantages of warehouses?
+
+1
+Speed: Optimized for high-performance queries.
+
+2
+High-quality data: Provides consistent and reliable information.
+
+3
+Business-focused: Directly answers common business questions.
+
+4
+Historical intelligence: Enables deep analysis of trends over time.
+
+What are the disadvantages of warehouses?
+
+1
+Inflexibility: Cannot easily accommodate new data types or unstructured data.
+
+2
+Cost: Often expensive to build and maintain.
+
+3
+Limited data types: Primarily designed for structured data only.
+
+4
+Long development time: Can take a long time to design and implement.
+
+
+Relying on a single design approach can be challenging, as neither excels at supporting the full range of an organization's data needs.

@@ -1,0 +1,43 @@
+Data lakehouse features and benefits
+Your score: 100% Passing score: 80%
+Congratulations! You passed this assessment.
+check
+1.
+
+How does BigQuery enable a unified analytics platform in the Cymbal company's data lakehouse?
+By exclusively managing high-transaction operational workloads with low latency.
+By requiring all data to be moved from Cloud Storage and AlloyDB into its native storage.
+By converting all unstructured and semi-structured data into a single proprietary format before analysis.
+check
+By using federated queries to analyze data directly in external sources like AlloyDB and in Iceberg tables on Cloud Storage without moving the data.
+Correct! BigQuery's ability to run federated queries allows it to act as a single pane of glass for analytics. It can query data where it lives—transactional data in AlloyDB, raw data in Cloud Storage managed by Iceberg, and its own native storage—creating a unified platform without costly data duplication.
+check
+2.
+
+For an online retail business like Cymbal, which of the following use cases is best suited for AlloyDB?
+check
+Managing real-time customer order processing and inventory updates.
+Performing complex analytical queries on historical marketing campaign performance.
+Storing large volumes of historical sales data for quarterly trend analysis.
+Storing raw, unstructured log files generated from website clicks.
+Correct! AlloyDB is a high-performance, PostgreSQL-compatible database built for high-throughput transactional workloads (OLTP) like managing orders, customer data, and inventory in real-time.
+check
+3.
+
+What is the primary role of Apache Iceberg in a data lakehouse architecture built on Google Cloud?
+It is the primary service used to store raw, unprocessed data files of any format or size.
+It is a fully managed, PostgreSQL-compatible database for operational workloads.
+check
+It adds a metadata layer to files in Cloud Storage, enabling features like schema evolution, time travel, and efficient querying.
+It acts as the central query engine for running high-speed SQL analytics.
+Correct! Apache Iceberg is an open table format that brings warehouse-like capabilities (ACID transactions, schema management, time travel) to files stored in a data lake on Cloud Storage, making them more reliable and manageable.
+check
+4.
+
+Which Google Cloud service is recommended as the primary, cost-effective object storage for a data lakehouse, capable of handling structured, semi-structured, and unstructured data?
+AlloyDB
+check
+Cloud Storage
+BigQuery
+Apache Iceberg
+Correct! Google Cloud Storage is the primary object storage service used to build the foundation of a data lake. It's designed to cost-effectively store enormous volumes of raw data in any format.

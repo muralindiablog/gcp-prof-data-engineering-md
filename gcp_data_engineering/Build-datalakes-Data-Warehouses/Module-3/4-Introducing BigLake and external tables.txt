@@ -1,0 +1,54 @@
+Introducing BigLake and external tables
+In previous lessons, you learned how BigQuery acts as a highly scalable and efficient cornerstone for your modern data warehouse. But the reality for most enterprises, including our example company Cymbal, is that valuable data exists in many places and formats.
+
+
+Data warehouse vs. data lake
+
+Historically, enterprise data was managed in two distinct ways: the data warehouse - the traditional standard for decades - perfect for structured, curated data used for business intelligence, and the data lake, emerging around 2010 as low-cost repository for storing vast amounts of raw data in any format.
+
+This separation, while logical, often leads to significant challenges. It creates data silos, making it difficult to analyze different types of data together. It requires building complex ETL pipelines to move and duplicate data from the lake to the warehouse, which introduces latency and increases costs. It also complicates data governance, as you have to manage security and access policies across two different systems. To solve these problems, a new architectural pattern has emerged: the lakehouse.
+
+
+Lakehouse architecture
+
+A lakehouse architecture combines the key benefits of both worlds: the low-cost, flexible storage of a data lake with the powerful querying, transaction management, and governance features of a data warehouse, all within a single, unified system. On Google Cloud, the service that makes this powerful architecture a reality is BigLake.
+
+
+BigLake and external tables
+
+BigLake acts as a storage engine and connector that allows you to extend the capabilities of BigQuery to your data in object storage, like Google Cloud Storage. BigLake lets you create tables in BigQuery that do not hold the data themselves but instead point to the data files living in your data lake. These are called external tables.
+
+
+Let's consider how Cymbal can use this.
+
+Cymbal's data science team stores raw, semi-structured web server log files in JSON format in a Cloud Storage bucket. To analyze this clickstream data, they would historically need a complex data pipeline to parse and load the data into BigQuery.
+
+With BigLake, the process is much simpler. You can create a BigLake external table directly on top of the JSON files in Cloud Storage. Now, you can use the familiar BigQuery SQL interface to query this clickstream data instantly, as if it were a native BigQuery table.
+
+You can even join this external table with a native BigQuery sales table to discover correlations between website behavior and purchasing habits, without ever moving or duplicating data.
+
+
+Governance and security
+
+One of the most powerful features of BigLake is how it centralizes governance and security. You can apply fine-grained security controls, including row-level and column-level security, directly on the BigLake tables within BigQuery. This is enabled through access delegation.
+
+When you create a BigLake table, you associate it with a service account that has permission to read the underlying data in Cloud Storage. The end-user querying the table only needs permission on the BigQuery table, not on the Cloud Storage bucket. This means Cymbal's governance team can grant a marketing analyst access to query only specific columns, like product_page_url and timestamp, while masking sensitive PII columns like ip_address. The analyst gets the data they need, but can never bypass BigQuery security controls to access the raw files in the lake.
+
+Open standards
+Open standards like Apache Iceberg ensure your data is flexible, interoperable, and not locked into one vendor. Let’s explore what Iceberg brings to a lakehouse and how BigQuery with BigLake supports it.
+
+Open standards
+Lakehouses rely on open, standardized formats to avoid lock-in and ensure interoperability.
+
+Iceberg basics
+Iceberg brings the reliability of traditional SQL tables to your data lake, with features like ACID transactions, schema evolution, and time travel.
+
+BigQuery + BigLake support
+BigQuery, through BigLake, offers first-class, native support for Apache Iceberg. This is a game-changer. Cymbal can have their Spark jobs write data into Iceberg-formatted tables in their Cloud Storage data lake. Then, they can register that Iceberg table with BigLake, and it instantly becomes available for high-performance querying inside BigQuery.
+
+Beyond read-only
+You are not limited to just reading the data. You can run UPDATE, DELETE, and MERGE statements directly from BigQuery on your Iceberg tables. This means Cymbal's data engineering team can perform data corrections or handle right-to-be-forgotten requests on their data lake data using standard SQL in BigQuery.
+
+Cymbal’s benefits
+By embracing BigLake and open formats like Iceberg, Cymbal can build a truly unified and open data platform. They get a single pane of glass for analytics, a consistent governance model across all their data, and the flexibility to use the best tool for the job, whether that's Spark for data processing or BigQuery for interactive analytics, all operating on a single source of truth.
+

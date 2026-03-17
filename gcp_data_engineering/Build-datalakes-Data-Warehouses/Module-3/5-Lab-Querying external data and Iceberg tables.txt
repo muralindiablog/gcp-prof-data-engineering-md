@@ -1,0 +1,146 @@
+Verify or enable required APIs
+In the Google Cloud console, enter BigLake API in the top search bar.
+
+Click on the result for BigLake API under Marketplace.
+
+If the API is not already enabled, click Enable to enable the API.
+
+Check IAM permissions.
+From the navigation menu select IAM & Admin and from the flyout submenu select IAM.
+
+Find your entry which will be similar to student-xx-xxxxxxxxxxxx@qwiklabs.net
+
+Verify you have the role BigQuery Connection Admin and BigQuery Connection User
+
+Task 1. Create a connection to Cloud Storage
+In this task, you create a new connection to Cloud Storage for BigQuery to use for reading the data in a CSV file in Cloud Storage as an external table.
+
+Create the connection
+In the Google Cloud console, in the Navigation menu (Navigation menu), navigate to BigQuery > Studio.
+
+On the top left pane, click Explorer and click + Add data.
+
+For Data Source Type select Storage/Data Lakes.
+
+For Most popular data sources click the card for Google Cloud Storage.
+
+In the resulting selection of cards for Access external data in place click on External or BigLake Table.
+
+In the Create table screen use the following values:
+
+Property	Value
+Create table from	Google Cloud Storage
+Select file from GCS bucket or use a URI pattern	
+cloud-training/OCBL462/cymbal_synthetic_weblog_data.csv
+Copied!
+File format	CSV
+Source Data Partitioning	Leave un-checked
+Project	
+Project ID
+Copied!
+Dataset	Click Dataset, from Loaded datasets select
+cymbal_lake
+Table	
+web_log
+Copied!
+Table type	External table
+Create a BigLake table using a Cloud resource connection	Check the box for this item
+Click the Connection ID drop down and select Create a new Cloud resource connection
+Connection type	Vertex AI remote models, remote functions and BigLake and Spanner (Cloud Resource)
+Connection ID	
+gcs-bucket-Project ID_eds
+Copied!
+Location type	Region
+Region	
+Region
+Copied!
+Friendly name	Leave blank
+Description	Leave blank
+Click Create connection
+Schema, Auto detect	Check the box for this item
+Leave everything else at the defaults and click Create table
+To verify the objective, click Check my progress.
+Create a connection to Cloud Storage
+
+Task 2. Create and load the Iceberg table in Cloud Storage with BigQuery
+In this task you ingest the data from the external table you just created and load it into Iceberg format in a Cloud Storage bucket.
+
+In the Google Cloud console, in the Navigation menu (Navigation menu), navigate to BigQuery > Studio.
+
+If not already open click Classic Explorer and expand your project. It will be similar to qwiklabs-gcp-xx-xxxxxxxxxxxx.
+
+Expand the entry for cymbal_lake.
+
+Click the 3 vertical dots to the right of the entry for web_log. Select Query from the popup menu.
+
+Close the reference panel by clicking the X in the top right corner.
+
+Replace the SQL query with the following code:
+
+CREATE TABLE cymbal_lake.iceberg_web_log
+WITH CONNECTION `projects/Project ID/locations/Region/connections/gcs-bucket-Project ID_eds`
+OPTIONS (
+ table_format = 'ICEBERG',
+ storage_uri = 'gs://gcs-bucket-Project ID') AS
+SELECT * FROM `cymbal_lake.web_log`;
+Copied!
+Click the Run button. After processing you will get an error message. Don't close it as you need the BigQuery service account ID from it to set the proper permission. The error message will be like this example:
+
+Access Denied: BigQuery BigQuery: Permission denied while writing data. bqcx-542604010272-n24h@gcp-sa-bigquery-condel.iam.gserviceaccount.com does not have storage.objects.create access to the Google Cloud Storage object. Permission 'storage.objects.create' denied on resource (or it may not exist). Please make sure gs://gcs-bucket-qwiklabs-gcp-00-333263c4c0ba/data/46d259a5-5da4-4e66-afa8-ae849d1bef50-17da16d07142b039-f-00000-of-00001.parquet is accessible via appropriate IAM roles, e.g. Storage Object Viewer or Storage Object Creator
+Copy the user ID from the error message. It will be in this format bqcx-xxxxxxxxxxxx-xxxx@gcp-sa-bigquery-condel.iam.gserviceaccount.com
+
+In the Google Cloud console, in the Navigation menu (Navigation menu), navigate to Cloud Storage > Buckets.
+
+Click the 3 vertical dots at the right end of the row with your bucket gcs-bucket-Project ID and select Edit access.
+
+In the box Access control click the link to Switch to uniform
+
+In the popup select Uniform. Click Save.
+
+Click + Add principal
+
+In New principal paste in the user ID you copied from the BigQuery error message.
+
+Click Select a role *
+
+In the Filter enter Storage Object User and select Storage Object User from the resulting list then click Save.
+
+Return to BigQuery and rerun the create table query by repeating Task 2 step 6.
+
+To verify the objective, click Check my progress.
+Create and load the Iceberg table in Cloud Storage with BigQuery
+
+Task 3. Query the Iceberg table from BigQuery
+You will now work with BigQuery to access the data in the Iceberg table you just created in Cloud Storage.
+
+In the Google Cloud console, in the Navigation menu (Navigation menu), navigate to BigQuery > Studio.
+
+If not already open expand the entry in Classic Explorer for your project. It will appear like qwiklabs-gcp-xx-xxxxxxxxxxxx.
+
+Expand the entry for cymbal_lake.
+
+Click the 3 vertical dots to the right of the entry for iceberg_web_log. Select Query from the popup menu.
+
+Close the reference panel by clicking the X in the top right corner.
+
+Replace the SQL query with the following code:
+
+SELECT * FROM cymbal_lake.iceberg_web_log LIMIT 1000;
+Copied!
+Click the Run button. The returned data is from your Iceberg table in Cloud Storage!
+
+Replace the SQL query with the following code:
+
+SELECT * FROM cymbal_lake.iceberg_web_log AS WL 
+INNER JOIN customers.customer_details AS CD
+ON WL.customer_id = CD.id
+LIMIT 1000;
+Copied!
+
+Click the Run button. The returned data is from your Iceberg table in Cloud Storage joined to customer data in a native BigQuery table!
+
+To verify the objective, click Check my progress.
+Query the Iceberg table from BigQuery
+
+Congratulations!
+You configured an external table in BigQuery to access data from a CSV file in Cloud Storage. You then created an Iceberg table in Cloud Storage and populated it with data from the CSV file by using BigQuery. Finally, you ran a query combining data in the Iceberg table with data in a native BigQuery table. While this was a simple example, it demonstrates the power and flexibility that Cymbal's BigQuery and BigLake lakehouse provides to turn data into a powerful business tool.

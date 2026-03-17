@@ -1,0 +1,83 @@
+BigQuery and BigLake
+Your score: 100% Passing score: 80%
+Congratulations! You passed this assessment.
+check
+1.
+
+What is a primary benefit of BigQuery being a "fully managed" and "serverless" data warehouse for an online retail company like Cymbal?
+It necessitates building complex ETL pipelines to move data from the data lake to the warehouse for analysis.
+It requires manual provisioning of hardware and software patching, increasing control for data architects.
+check
+Google handles all infrastructure, patches, updates, and hardware failures, and automatically allocates necessary resources, significantly reducing operational overhead and enabling seamless scaling.
+It allows Cymbal's data architects to spend significant time on capacity planning and server management.
+Correct! As a fully managed and serverless platform, BigQuery abstracts all underlying infrastructure management from the user. This reduces the total cost of ownership and allows the data platform to scale automatically in response to demand without manual intervention.
+check
+2.
+
+In BigQuery, what roles do "slots" and "shuffle" play in enabling fast query execution on massive datasets?
+check
+Slots are virtual workers, self-contained units of computational power that process small pieces of data simultaneously in a massively parallel manner, while shuffle is the process of redistributing intermediate data using Google’s petabit internal network (Jupiter) for efficient aggregation and joining.
+Slots manage data storage within Colossus, while shuffle performs data archival to reduce costs.
+Slots are physical servers that users must provision, and shuffle is a data encryption method for security.
+Slots optimize data loading into BigQuery, and shuffle is responsible for data visualization post-query.
+Correct! BigQuery achieves its speed by breaking a query down into small pieces and assigning them to thousands of "slots" that run in parallel. When a query requires aggregation (like GROUP BY) or a JOIN, the "shuffle" stage uses Google's ultra-fast network to efficiently redistribute the intermediate data among the slots for the next stage of processing.
+check
+3.
+
+How do partitioning and clustering optimize BigQuery performance and cost for a large dataset like Cymbal's sales data?
+Both partitioning and clustering require scanning the entire dataset for every query, increasing processing time and cost.
+Partitioning shuffles data across all tables to distribute load, and clustering encrypts sensitive columns within the data.
+check
+Partitioning divides tables into smaller, manageable segments (like by date) so BigQuery only scans relevant partitions, drastically reducing data scanned; clustering sorts data within those partitions (like by customer ID), allowing BigQuery to jump directly to specific data, providing finer-grained data pruning.
+Partitioning creates duplicate copies of data for redundancy, while clustering is only applicable to external tables.
+Correct! Partitioning provides coarse-grained optimization; for example, a query filtered on a specific date will only scan that date's partition, ignoring all others. Clustering provides fine-grained optimization by physically sorting the data within a partition, which allows BigQuery to skip scanning large blocks of rows that do not match a filter condition.
+check
+4.
+
+Which statement accurately describes BigQuery's interaction with Apache Iceberg tables via BigLake?
+BigQuery ignores Iceberg's metadata, requiring full table scans for queries, making it inefficient for large datasets.
+BigQuery can only read data from Iceberg tables but cannot perform write operations like UPDATE, DELETE, or MERGE.
+BigQuery requires a proprietary connector to interact with Iceberg, limiting interoperability and open standards.
+check
+BigQuery offers first-class, native support for Apache Iceberg through BigLake, understanding its metadata for advanced optimizations like partitioning and clustering, and allowing direct UPDATE, DELETE, and MERGE statements on Iceberg tables.
+Correct! BigQuery's integration is deep and native. It can read the Iceberg metadata to perform efficient query planning and pruning, and it can also write back to the table, managing the creation of new manifest files and data files according to the Iceberg specification.
+check
+5.
+
+What problem does the BigLake service solve within a lakehouse architecture for enterprises like Cymbal?
+check
+BigLake acts as a storage engine and connector, allowing BigQuery to directly query data stored in open formats within object storage (like Google Cloud Storage) as external tables, combining the low-cost, flexible storage of a data lake with the powerful querying and governance features of a data warehouse, without moving or duplicating data.
+It forces data into a single, proprietary format, leading to vendor lock-in and limited interoperability.
+It creates separate data silos for structured and unstructured data, making it difficult to analyze different types of data together.
+It requires building complex ETL pipelines to duplicate data from the data lake to the data warehouse for structured analysis.
+Correct! BigLake effectively extends BigQuery's capabilities beyond its native managed storage. It allows BigQuery to apply its advanced query engine, security controls, and governance features to data living in open formats in a data lake, which is the foundational concept of a data lakehouse.
+check
+6.
+
+The separation of storage and compute in BigQuery's architecture offers which key advantage for managing costs and ensuring performance?
+It increases the complexity of managing data growth and query demands, as resources are tightly coupled.
+It ties compute resources directly to storage, meaning both must scale together, which can increase fixed costs.
+It requires pre-provisioning all necessary compute power, even when not in use, leading to potential overspending.
+check
+Storage and compute can scale independently, allowing users to add more storage as data grows, and use more compute power only when needed for complex queries, paying only for the compute used.
+Correct! This is the core benefit of BigQuery's disaggregated architecture. An organization can store petabytes of data affordably and then apply massive, parallel compute power for a few seconds or minutes to run a complex query, paying only for that specific execution time.
+check
+7.
+
+How does BigLake centralize governance and security for external data queried through BigQuery?
+It duplicates data into BigQuery's native storage to apply security policies, increasing storage costs and data latency.
+It requires end-users to have direct permissions on the underlying Cloud Storage buckets to access the data, decentralizing control.
+It only supports basic table-level security, not fine-grained controls like row-level or column-level security.
+check
+BigLake uses access delegation by associating an external table with a service account that has Cloud Storage permissions, allowing users to be granted fine-grained security controls (including row-level and column-level security) directly on the BigLake tables within BigQuery, without needing direct access to the raw files.
+Correct! This process, known as access delegation, is the core of BigLake's security model. It decouples permissions on the data (managed in BigQuery) from permissions on the underlying files (managed in Cloud Storage), providing a single, centralized point of control for data governance.
+check
+8.
+
+When querying Apache Iceberg tables in Cloud Storage via BigLake, how does BigQuery leverage Iceberg's structure for performance?
+BigQuery reimplements its own partitioning and clustering logic over Iceberg files, ignoring the existing Iceberg metadata.
+BigQuery performs full scans of all data files within the Cloud Storage bucket regardless of query filters, as it doesn't understand Iceberg's file organization.
+check
+BigQuery intelligently leverages the existing structure defined in the Iceberg table's metadata, using its partitioning (e.g., transaction_date) to identify and prune irrelevant files, and its file-level statistics (mimicking clustering by sorted columns like customer_id) for powerful predicate pushdown to skip non-matching files.
+BigQuery loads all Iceberg data into native Colossus storage before querying for optimization, increasing data movement.
+Correct! BigQuery reads the Iceberg manifest lists and manifest files to understand the table's layout. It uses this information to prune partitions (not reading files from dates outside the query's WHERE clause) and leverages min/max value statistics stored for columns within data files to skip reading files that could not possibly contain relevant rows.

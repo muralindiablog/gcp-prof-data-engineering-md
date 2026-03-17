@@ -1,0 +1,12 @@
+Module 3: Modernizing data warehouses with BigQuery and BigLake
+Next, you'll explore how to modernize your data warehouse using Google Cloud's powerful tools, BigQuery and BigLake. If you are experienced with data warehousing but new to Google Cloud, you're in the right place. You'll focus on how Google Cloud leverages open standards to give you flexibility and choice.
+
+
+In this module, you will learn to:
+
+1 Identify the benefits of BigQuery compared to traditional warehouses.
+
+2 Describe how partitioning, clustering, and BigLake external tables improve performance and governance.
+
+3 Apply open standards like Apache Iceberg to design flexible, interoperable analytics solutions.
+

@@ -1,0 +1,149 @@
+Vector search with BigQuery
+experiment
+Lab
+schedule
+45 minutes
+universal_currency_alt
+5 Credits
+show_chart
+Introductory
+info
+This lab may incorporate AI tools to support your learning.
+Overview
+BigQuery Vector Search Vector search allows you to find the most similar items in your dataset by comparing the mathematical representations of their features, known as embeddings, rather than relying on exact keyword matches.
+
+Have you ever been shopping online and been impressed by how a website can recommend products that are incredibly similar to what you're searching for, even if you can't quite describe them with words? This is often powered by vector search, a technique that goes beyond simple keyword matching. Instead of just searching for text, vector search analyzes the underlying features and characteristics of an item, allowing it to find things that are conceptually or visually similar. In this lab, you'll get hands-on experience using the powerful and scalable vector search capabilities built directly into BigQuery.
+
+For a global retailer like Cymbal E-commerce, this technology is a game-changer for customer experience. Imagine a customer searching for a "lightweight jacket for hiking." A traditional keyword search might miss the perfect product if its description uses "windbreaker" instead of "jacket." With vector search, Cymbal can analyze embeddings—numerical representations of product images and descriptions—to return a list of all relevant outerwear, regardless of the exact terminology. This helps customers discover the products they want faster, making them happier and boosting sales. Let's dive in and build this for Cymbal!
+
+In this lab, you learn how to use BigQuery to perform vector searches.
+
+** Note: In this lab, you'll use a public database of patents instead of Cymbal's proprietary product listings and detailed descriptions for privacy reasons. The process is the same; you only need to change the dataset, table, and column names to match your source data.
+
+What you'll do
+Use an ML model to generate embeddings
+Create a vector index
+Use the VECTOR_SEARCH function against the embeddings you created
+Setup and requirements
+Before you click the Start Lab button
+Read these instructions. Labs are timed and you cannot pause them. The timer, which starts when you click Start Lab, shows how long Google Cloud resources will be made available to you.
+
+This hands-on lab lets you do the lab activities yourself in a real cloud environment, not in a simulation or demo environment. It does so by giving you new, temporary credentials that you use to sign in and access Google Cloud for the duration of the lab.
+
+What you need
+To complete this lab, you need:
+
+Access to a standard internet browser (Chrome browser recommended).
+Time to complete the lab.
+Note: If you have a personal Google Cloud account or project, do not use it for this lab.
+Note: If you are using a Pixelbook, open an Incognito window to run this lab.
+Log in to Google Cloud Console
+Using the browser tab or window you are using for this lab session, copy the Username from the Connection Details panel and click the Open Google Console button.
+Note: If you are asked to choose an account, click Use another account.
+Paste in the Username, and then the Password as prompted.
+Click Next.
+Accept the terms and conditions.
+Since this is a temporary account, which will last only as long as this lab:
+
+Do not add recovery options
+Do not sign up for free trials
+Once the console opens, view the list of services by clicking the Navigation menu (Navigation menu icon) at the top-left.
+Navigation menu
+
+Verify or enable required APIs
+In the Google Cloud Console, enter BigQuery API in the top search bar.
+
+Click on the result for BigQuery API under Marketplace.
+
+If the API is not already enabled, click Enable to enable the API.
+
+Repeat steps 1-3 for BigQuery Connection API and again for Vertex AI API.
+
+Task 1. Create a remote model for text embedding generation
+In this task, you create a Vertex AI text embedding generation model that is required for a vector search and to create the embeddings for the database.
+
+Create an AI model
+In the Google Cloud Console Navigation menu (Navigation menu), navigate to BigQuery > Studio.
+
+Select the Untitled query tab.
+
+Enter the following code:
+
+CREATE OR REPLACE MODEL `bqml_lab.embedding_model`
+  REMOTE WITH CONNECTION DEFAULT
+  OPTIONS (ENDPOINT = 'text-embedding-005');
+Copied!
+Click Check my progress to verify the objective.
+Create an ML model
+
+Click Run. The query will take a couple of minutes to run. If you get an error regarding a missing service account, simply rerun the same query.
+
+Replace the query with the following code:
+
+CREATE OR REPLACE TABLE `bqml_lab.embeddings` AS
+SELECT * FROM ML.GENERATE_EMBEDDING( MODEL `bqml_lab.embedding_model`,
+  (    SELECT
+   title,
+   url,
+   abstract AS content
+ FROM
+   `bqml_lab.patent_data`
+ LIMIT 200000))
+WHERE LENGTH(ml_generate_embedding_status) = 0;
+Copied!
+Click Run. The query will take about 5 minutes to run.
+
+Click Check my progress to verify the objective.
+Create a table named 'embeddings' by using a BigQuery ML model
+
+Replace the query with the following code:
+
+CREATE OR REPLACE VECTOR INDEX my_index
+ON `bqml_lab.embeddings`(ml_generate_embedding_result)
+OPTIONS(index_type = 'IVF',
+  distance_type = 'COSINE',
+  ivf_options = '{"num_lists":500}');
+Copied!
+Click Run. The query will take a few minutes to run.
+
+Click Check my progress to verify the objective.
+Create a vector index on the 'embeddings' table
+
+Enter the following code to check the status of the index:
+
+SELECT table_name,
+  index_name,
+  index_status,
+  coverage_percentage,
+  last_refresh_time,
+  disable_reason
+FROM `"Project ID".bqml_lab.INFORMATION_SCHEMA.VECTOR_INDEXES`;
+Copied!
+Click Run. The index is ready to be used when the coverage_percentage column value is greater than 0 and the last_refresh_time column value isn't NULL. If the index is not ready the first time you run the above query rerun it occasionally to check on the index status. Continue the lab when you see results indicating the index is ready to use.
+
+Perform a text similarity search using the vector index
+You will use the VECTOR_SEARCH function to search for entries relevant to your search term which is the phrase "improving online shopper search results" in this example. The model you use to generate the embeddings when searching must be the same as the one you use to generate the embeddings in the table you are comparing against, otherwise the search results won't be accurate.
+
+In the BigQuery query tab replace the code with the following:
+
+SELECT query.query, base.title, base.content
+FROM VECTOR_SEARCH(
+  TABLE `bqml_lab.embeddings`, 'ml_generate_embedding_result',
+  (
+  SELECT ml_generate_embedding_result, content AS query
+  FROM ML.GENERATE_EMBEDDING(
+  MODEL `bqml_lab.embedding_model`,
+  (SELECT 'improving online shopper search results' AS content))
+  ),
+  top_k => 5, options => '{"fraction_lists_to_search": 0.01}');
+Copied!
+Click Run.
+
+Optional: If you want to try other searches replace 'improving online shopper search results' in the code with a different search.
+
+Click Check my progress to verify the objective.
+Perform a text similarity search using the vector index
+
+Congratulations!
+You created an AI model, embeddings for your data, a vector index, and queried using the index to find the items most closely related to your search term.
+

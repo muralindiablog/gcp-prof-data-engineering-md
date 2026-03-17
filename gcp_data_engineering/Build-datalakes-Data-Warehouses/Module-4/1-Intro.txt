@@ -1,0 +1,15 @@
+Module 4: Advanced lakehouse patterns and data governance
+Modern data platforms must balance governance, security, advanced analytics, and scalability. In this module, you’ll learn how Google Cloud’s lakehouse architecture supports these needs, from protecting sensitive data to enabling machine learning and real-world migration strategies.
+
+
+In this module, you will learn to:
+
+1
+Explain how Google Cloud tools like Dataplex and Sensitive Data Protection strengthen governance and security in a lakehouse.
+
+2
+Demonstrate how to apply machine learning directly on lakehouse data using BigQuery ML and Vertex AI.
+
+3
+Discuss real-world architectural patterns, such as the medallion architecture, and discuss migration strategies for moving to a modern lakehouse.
+

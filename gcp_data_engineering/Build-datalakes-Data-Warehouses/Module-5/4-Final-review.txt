@@ -1,0 +1,39 @@
+Review and best practices
+Building a modern lakehouse on Google Cloud
+
+For a long time, companies relied on two separate systems: data warehouses for structured data analysis and data lakes for storing vast amounts of raw, unstructured data. This created silos, making it difficult to get a complete picture and often leading to data duplication.
+
+The lakehouse architecture emerged as a solution, combining the best of both worlds into a single, unified platform. 
+
+
+This lesson will review building a modern lakehouse on Google Cloud by leveraging its powerful, open-source-based services.
+
+Cymbal deals with a massive amount of data every day. From customer clicks on their website and mobile app to supplier inventory feeds and sales transactions, the data comes in various formats. A lakehouse architecture allows Cymbal to bring all this data together for powerful analytics and, increasingly, for building innovative AI-powered customer experiences.
+
+
+1
+Core components of a Google Cloud lakehouse
+A robust and scalable lakehouse on Google Cloud is built on a foundation of several key services that work together seamlessly. Let's review what these are.
+2
+Google Cloud Storage (GCS)
+This is the heart of your lakehouse, providing a highly scalable and cost-effective object storage service. Think of it as the foundational layer where all your data, in its raw and processed forms, resides.
+
+For Cymbal, this means storing everything from website clickstream data in JSON format to product images, supplier inventory files in CSV or Parquet, and historical data in Iceberg format.
+3
+BigQuery
+This powerful, serverless data warehouse acts as the analytics engine for your lakehouse. What makes BigQuery unique is its ability to directly query data in Cloud Storage without needing to move it. This separation of storage and compute is a core principle, offering flexibility and cost savings.
+4
+Dataplex
+As your data grows, managing it can become a significant challenge. Dataplex provides an intelligent data fabric that allows you to discover, manage, monitor, govern, and describe your data across your entire lakehouse.
+
+For Cymbal, Dataplex can automatically catalog the data in their GCS buckets, making it easily searchable for their data analysts and scientists. It also helps enforce data quality rules and security policies, ensuring that sensitive customer information is protected.
+5
+AlloyDB for PostgreSQL
+While the lakehouse is excellent for analytical workloads, many applications still rely on transactional databases. AlloyDB is a fully managed, PostgreSQL-compatible database service that offers superior performance and availability.
+
+In Cymbal's architecture, AlloyDB could power their e-commerce platform's backend, handling real-time order processing and customer account management. The data from AlloyDB can then be easily integrated into the lakehouse for broader analytics via federated queries.
+6
+Apache Iceberg
+This is an open-source table format that brings the reliability and performance of a traditional database to your data lake. By using Iceberg with BigQuery and Cloud Storage, you can perform efficient updates and deletes on your data, a capability that was traditionally difficult in data lakes.
+
+This is crucial for Cymbal when they need to update product information or manage customer data privacy requests.
